@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Selection</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      }
+
+      #selection-page {
+        padding: 20px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #f5f5f7;
+        position: relative;
+      }
+
+      .logo {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        width: 150px;
+        height: auto;
+      }
+
+      .button-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .kiosk-button {
+        padding: 30px;
+        font-size: 24px;
+        border: none;
+        border-radius: 15px;
+        background-color: #007aff;
+        color: white;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        transition: background-color 0.3s;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .kiosk-button:hover {
+        background-color: #0056b3;
+      }
+
+      h1 {
+        color: #1d1d1f;
+        margin-bottom: 40px;
+        text-align: center;
+      }
+
+      #form-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+      }
+
+      #form-iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      #back-button {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        padding: 15px 30px;
+        font-size: 18px;
+        background-color: #007aff;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        z-index: 1000;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="selection-page">
+      <img src="your-logo.png" alt="Logo" class="logo" />
+      <h1>Please Select a Form</h1>
+      <div class="button-container">
+        <button
+          onclick="loadForm('https://forms.office.com/Pages/ResponsePage.aspx?id=paHDdwIxFkWd44ENbeBJFQ8WL-MAQ11Oi1102Lg7uPlUMjFVRjI0RTBGTVpIWDVZMFVKUzJBMEk5RS4u')"
+          class="kiosk-button"
+        >
+          K°Lever Idea
+        </button>
+        <button
+          onclick="loadForm('https://forms.office.com/pages/responsepage.aspx?id=paHDdwIxFkWd44ENbeBJFR7gHGEW5LNLotXoyszYlLxUQjQ2WVk2QVFHTUhSWjNRMDMzUDgxTkM2RyQlQCN0PWcu&route=shorturl')"
+          class="kiosk-button"
+        >
+          Safety Form
+        </button>
+      </div>
+    </div>
+
+    <button id="back-button" onclick="showSelection()">
+      Return to Selection
+    </button>
+    <div id="form-container">
+      <iframe id="form-iframe"></iframe>
+    </div>
+
+    <script>
+      function loadForm(url) {
+        document.getElementById("selection-page").style.display = "none";
+        document.getElementById("form-container").style.display = "block";
+        document.getElementById("back-button").style.display = "block";
+        document.getElementById("form-iframe").src = url;
+      }
+
+      function showSelection() {
+        document.getElementById("selection-page").style.display = "flex";
+        document.getElementById("form-container").style.display = "none";
+        document.getElementById("back-button").style.display = "none";
+        document.getElementById("form-iframe").src = "";
+      }
+
+      document.getElementById("form-iframe").onload = function () {
+        if (this.contentWindow.location.href.includes("thankyou")) {
+          showSelection();
+        }
+      };
+    </script>
+  </body>
+</html>
