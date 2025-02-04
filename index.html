@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -129,25 +129,56 @@
     </div>
 
     <script>
-      function loadForm(url) {
-        document.getElementById("selection-page").style.display = "none";
-        document.getElementById("form-container").style.display = "block";
-        document.getElementById("back-button").style.display = "block";
-        document.getElementById("form-iframe").src = url;
-      }
+      document.addEventListener("DOMContentLoaded", function () {
+        var formLoadTimeout; // Timeout handle for form loading
 
-      function showSelection() {
-        document.getElementById("selection-page").style.display = "flex";
-        document.getElementById("form-container").style.display = "none";
-        document.getElementById("back-button").style.display = "none";
-        document.getElementById("form-iframe").src = "";
-      }
+        // Automatically refresh the page every 4 hours to clear any memory issues.
+        setTimeout(function () {
+          window.location.reload();
+        }, 4 * 60 * 60 * 1000); // 4 hours in milliseconds
 
-      document.getElementById("form-iframe").onload = function () {
-        if (this.contentWindow.location.href.includes("thankyou")) {
-          showSelection();
-        }
-      };
+        // Function to load a form in the iframe.
+        window.loadForm = function (url) {
+          // Clear any previous load timeout.
+          clearTimeout(formLoadTimeout);
+
+          document.getElementById("selection-page").style.display = "none";
+          document.getElementById("form-container").style.display = "block";
+          document.getElementById("back-button").style.display = "block";
+          document.getElementById("form-iframe").src = url;
+
+          // Set a timeout to revert back if the form takes too long to load (e.g., 30 seconds).
+          formLoadTimeout = setTimeout(function () {
+            console.warn("Form load timeout. Reverting to selection screen.");
+            showSelection();
+          }, 30000); // 30 seconds
+        };
+
+        // Function to return to the selection screen.
+        window.showSelection = function () {
+          clearTimeout(formLoadTimeout);
+          document.getElementById("selection-page").style.display = "flex";
+          document.getElementById("form-container").style.display = "none";
+          document.getElementById("back-button").style.display = "none";
+          document.getElementById("form-iframe").src = "";
+        };
+
+        // Monitor the iframe load event to detect when the user has completed a form.
+        document.getElementById("form-iframe").onload = function () {
+          try {
+            // If the iframe URL includes "thankyou", assume the form is complete.
+            if (this.contentWindow.location.href.includes("thankyou")) {
+              showSelection();
+            }
+          } catch (e) {
+            // Likely a cross-origin error; log the issue and continue.
+            console.warn("Cross-origin check not permitted:", e);
+          } finally {
+            // Clear the load timeout regardless of success or error.
+            clearTimeout(formLoadTimeout);
+          }
+        };
+      });
     </script>
   </body>
 </html>
