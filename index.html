@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -14,8 +14,11 @@
         margin: 0;
         padding: 0;
         height: 100%;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        /* Sleeker, modern font: SF Pro Display (Apple's font) with fallbacks */
+        font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Roboto",
+          "Helvetica Neue", sans-serif;
+        background-color: #1E1E1E;
+        color: #FFFFFF;
       }
 
       #selection-page {
@@ -25,48 +28,63 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-color: #f5f5f7;
+        background-color: #1E1E1E;
         position: relative;
       }
 
-      .logo {
+      #logo-canvas {
         position: absolute;
         top: 20px;
         left: 20px;
-        width: 150px;
-        height: auto;
+        width: 200px; /* Increased size */
+        height: 200px; /* Square canvas for rotation */
       }
 
       .button-container {
         display: flex;
         flex-direction: column;
-        gap: 30px;
+        gap: 25px;
         width: 100%;
         max-width: 500px;
       }
 
       .kiosk-button {
-        padding: 30px;
+        padding: 25px;
         font-size: 24px;
-        border: none;
-        border-radius: 15px;
-        background-color: #007aff;
-        color: white;
+        font-weight: 500; /* Slightly bolder for modern look */
+        border: 1px solid rgba(255, 236, 0, 0.3); /* Slightly brighter yellow border */
+        border-radius: 10px; /* Sharper corners */
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(30, 30, 30, 0.8)); /* Subtle gradient */
+        backdrop-filter: blur(10px); /* Enhanced blur for sleekness */
+        color: #FFEC00; /* Yellow text */
         cursor: pointer;
         text-align: center;
         text-decoration: none;
-        transition: background-color 0.3s;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), /* Deeper base shadow */
+                    0 0 8px rgba(255, 236, 0, 0.2); /* Subtle yellow glow */
       }
 
       .kiosk-button:hover {
-        background-color: #0056b3;
+        transform: scale(1.03); /* Slightly larger pop */
+        border-color: rgba(255, 236, 0, 0.6); /* Brighter yellow border */
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.7), /* Elevated shadow */
+                    0 0 12px rgba(255, 236, 0, 0.4); /* Stronger yellow glow */
       }
 
       h1 {
-        color: #1d1d1f;
+        color: #FFFFFF;
         margin-bottom: 40px;
         text-align: center;
+        font-size: 32px;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+      }
+
+      .translated-text {
+        font-size: 20px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.8);
       }
 
       #form-container {
@@ -76,7 +94,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: white;
+        background: #000000;
       }
 
       #form-iframe {
@@ -89,39 +107,58 @@
         position: fixed;
         top: 20px;
         left: 20px;
-        padding: 15px 30px;
+        padding: 12px 25px;
         font-size: 18px;
-        background-color: #007aff;
-        color: white;
-        border: none;
+        font-weight: 500; /* Matches buttons */
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(30, 30, 30, 0.8));
+        backdrop-filter: blur(10px);
+        color: #FFEC00;
+        border: 1px solid rgba(255, 236, 0, 0.3);
         border-radius: 10px;
         cursor: pointer;
         z-index: 1000;
         display: none;
+        transition: transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6),
+                    0 0 8px rgba(255, 236, 0, 0.2);
+      }
+
+      #back-button:hover {
+        transform: scale(1.03);
+        border-color: rgba(255, 236, 0, 0.6);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.7),
+                    0 0 12px rgba(255, 236, 0, 0.4);
       }
     </style>
   </head>
   <body>
     <div id="selection-page">
-      <img src="kelvion_logo-transformed.png" alt="Logo" class="logo" />
-<h1>
-  Please Select a Form<br>
-  <span class="translated-text">Por favor seleccione un formulario</span>
-</h1>
+      <canvas id="logo-canvas"></canvas>
+      <h1>
+        Please Select a Form<br>
+        <span class="translated-text">Por favor seleccione un formulario</span>
+      </h1>
       <div class="button-container">
         <button
           onclick="loadForm('https://forms.office.com/Pages/ResponsePage.aspx?id=paHDdwIxFkWd44ENbeBJFQ8WL-MAQ11Oi1102Lg7uPlUMjFVRjI0RTBGTVpIWDVZMFVKUzJBMEk5RS4u')"
           class="kiosk-button"
         >
           K°Lever Idea<br>
-<span style="font-style: italic;">Forma de palanca K°</span>
+          <span style="font-style: italic;">Forma de palanca K°</span>
         </button>
         <button
           onclick="loadForm('https://forms.office.com/pages/responsepage.aspx?id=paHDdwIxFkWd44ENbeBJFR7gHGEW5LNLotXoyszYlLxUQjQ2WVk2QVFHTUhSWjNRMDMzUDgxTkM2RyQlQCN0PWcu&route=shorturl')"
           class="kiosk-button"
         >
           Safety Form<br>
-<span style="font-style: italic;">Formulario de seguridad</span>
+          <span style="font-style: italic;">Formulario de seguridad</span>
+        </button>
+        <button
+          onclick="loadForm('https://forms.office.com/Pages/ResponsePage.aspx?id=paHDdwIxFkWd44ENbeBJFQ8WL-MAQ11Oi1102Lg7uPlUNkdNQkpGRlpSU0tBTFdJWU9UUTFWQkJTUy4u')"
+          class="kiosk-button"
+        >
+          Safety Incident Form<br>
+          <span style="font-style: italic;">Formulario de Incidentes de Seguridad</span>
         </button>
       </div>
     </div>
@@ -133,56 +170,106 @@
       <iframe id="form-iframe"></iframe>
     </div>
 
+    <!-- Load Three.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        var formLoadTimeout; // Timeout handle for form loading
+        let lastActivity = Date.now();
+        let formLoadTimeout;
+        let formIdleTimeout;
 
-        // Automatically refresh the page every 4 hours to clear any memory issues.
-        setTimeout(function () {
-          window.location.reload();
-        }, 4 * 60 * 60 * 1000); // 4 hours in milliseconds
+        // Track user activity
+        document.addEventListener("touchstart", () => lastActivity = Date.now());
 
-        // Function to load a form in the iframe.
+        // Check every minute for idle time and refresh if 4 hours have passed on selection screen
+        setInterval(() => {
+          if (
+            document.getElementById("selection-page").style.display !== "none" &&
+            Date.now() - lastActivity > 4 * 60 * 60 * 1000
+          ) {
+            window.location.reload();
+          }
+        }, 60000);
+
+        // Function to load a form in the iframe
         window.loadForm = function (url) {
-          // Clear any previous load timeout.
           clearTimeout(formLoadTimeout);
-
           document.getElementById("selection-page").style.display = "none";
           document.getElementById("form-container").style.display = "block";
           document.getElementById("back-button").style.display = "block";
           document.getElementById("form-iframe").src = url;
-
-          // Set a timeout to revert back if the form takes too long to load (e.g., 30 seconds).
           formLoadTimeout = setTimeout(function () {
             console.warn("Form load timeout. Reverting to selection screen.");
             showSelection();
-          }, 30000); // 30 seconds
+          }, 30000);
+          formIdleTimeout = setTimeout(() => {
+            showSelection();
+          }, 30 * 60 * 1000);
         };
 
-        // Function to return to the selection screen.
+        // Function to return to the selection screen
         window.showSelection = function () {
           clearTimeout(formLoadTimeout);
+          clearTimeout(formIdleTimeout);
+          lastActivity = Date.now();
           document.getElementById("selection-page").style.display = "flex";
           document.getElementById("form-container").style.display = "none";
           document.getElementById("back-button").style.display = "none";
           document.getElementById("form-iframe").src = "";
         };
 
-        // Monitor the iframe load event to detect when the user has completed a form.
+        // Monitor the iframe load event to detect when the user has completed a form
         document.getElementById("form-iframe").onload = function () {
           try {
-            // If the iframe URL includes "thankyou", assume the form is complete.
             if (this.contentWindow.location.href.includes("thankyou")) {
               showSelection();
             }
           } catch (e) {
-            // Likely a cross-origin error; log the issue and continue.
             console.warn("Cross-origin check not permitted:", e);
           } finally {
-            // Clear the load timeout regardless of success or error.
             clearTimeout(formLoadTimeout);
           }
         };
+
+        // Three.js Logo Animation (Bigger)
+        const canvas = document.getElementById("logo-canvas");
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000); // Aspect ratio 1 for square canvas
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+        renderer.setSize(200, 200); // Increased size
+
+        const textureLoader = new THREE.TextureLoader();
+        const logoTexture = textureLoader.load("kelvion_logo-transformed.png");
+        const geometry = new THREE.PlaneGeometry(2.5, 2.5); // Slightly larger plane
+        const material = new THREE.MeshBasicMaterial({
+          map: logoTexture,
+          transparent: true,
+          side: THREE.DoubleSide
+        });
+        const logo = new THREE.Mesh(geometry, material);
+        scene.add(logo);
+
+        camera.position.z = 3.5; // Adjusted camera distance for larger logo
+
+        let rotationSpeed = 0.005;
+        let isTouched = false;
+
+        // Touch interaction
+        canvas.addEventListener("touchstart", () => {
+          isTouched = true;
+          rotationSpeed = 0.02;
+          setTimeout(() => {
+            isTouched = false;
+            rotationSpeed = 0.005;
+          }, 2000);
+        });
+
+        function animate() {
+          requestAnimationFrame(animate);
+          logo.rotation.y += rotationSpeed;
+          renderer.render(scene, camera);
+        }
+        animate();
       });
     </script>
   </body>
