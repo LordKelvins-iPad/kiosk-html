@@ -1,100 +1,209 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Enable standalone full-screen mode on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <!-- Optional: Set the status bar style (e.g., black) -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#1E1E1E" />
     <title>Form Selection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-      body,
-      html {
+      :root {
+        --primary-bg: #1E1E1E;
+        --secondary-bg: #2A2A2A;
+        --accent-color: #FFEC00;
+        --accent-light: rgba(255, 236, 0, 0.8);
+        --accent-dim: rgba(255, 236, 0, 0.3);
+        --text-primary: #FFFFFF;
+        --text-secondary: rgba(255, 255, 255, 0.8);
+        --shadow-strong: 0 10px 30px rgba(0, 0, 0, 0.25);
+        --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.15);
+        --transition-quick: 0.2s ease;
+        --transition-medium: 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+        --radius-standard: 12px;
+        --radius-small: 8px;
+      }
+
+      * {
+        box-sizing: border-box;
         margin: 0;
         padding: 0;
+      }
+
+      body, html {
         height: 100%;
-        /* Sleeker, modern font: SF Pro Display (Apple's font) with fallbacks */
-        font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Roboto",
-          "Helvetica Neue", sans-serif;
-        background-color: #1E1E1E;
-        color: #FFFFFF;
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: var(--primary-bg);
+        color: var(--text-primary);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-user-select: none;
+        user-select: none;
+        overflow: hidden;
+        line-height: 1.5;
+      }
+
+      #app-container {
+        position: relative;
+        min-height: 100vh;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      /* Animated background gradient */
+      .bg-gradient {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 50% 50%, rgba(50, 50, 50, 0.4) 0%, rgba(30, 30, 30, 0.9) 100%);
+        z-index: -1;
+        opacity: 0.7;
+      }
+
+      /* Subtle animated particles */
+      .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.4;
       }
 
       #selection-page {
         padding: 20px;
-        height: 100%;
+        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-color: #1E1E1E;
         position: relative;
       }
 
-      #logo-canvas {
+      .logo-container {
         position: absolute;
-        top: 20px;
-        left: 20px;
-        width: 200px; /* Increased size */
-        height: 200px; /* Square canvas for rotation */
+        top: 30px;
+        left: 30px;
+        width: 200px;
+        height: 200px;
+        perspective: 1000px;
+      }
+
+      #logo-canvas {
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+      }
+
+      #logo-fallback {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('transparent_white_logo.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        display: none;
+      }
+
+      .page-title {
+        margin-bottom: 50px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 38px;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+        margin-bottom: 12px;
+        background: linear-gradient(90deg, #FFFFFF, var(--accent-color));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .translated-text {
+        font-size: 22px;
+        font-weight: 400;
+        color: var(--text-secondary);
+        font-style: italic;
       }
 
       .button-container {
         display: flex;
         flex-direction: column;
-        gap: 25px;
+        gap: 28px;
         width: 100%;
-        max-width: 500px;
+        max-width: 520px;
       }
 
       .kiosk-button {
-        padding: 25px;
+        position: relative;
+        padding: 30px;
         font-size: 24px;
-        font-weight: 500; /* Slightly bolder for modern look */
-        border: 1px solid rgba(255, 236, 0, 0.3); /* Slightly brighter yellow border */
-        border-radius: 10px; /* Sharper corners */
-        background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(30, 30, 30, 0.8)); /* Subtle gradient */
-        backdrop-filter: blur(10px); /* Enhanced blur for sleekness */
-        color: #FFEC00; /* Yellow text */
-        cursor: pointer;
+        font-weight: 500;
         text-align: center;
-        text-decoration: none;
-        transition: transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), /* Deeper base shadow */
-                    0 0 8px rgba(255, 236, 0, 0.2); /* Subtle yellow glow */
+        color: var(--accent-color);
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid var(--accent-dim);
+        border-radius: var(--radius-standard);
+        cursor: pointer;
+        overflow: hidden;
+        transition: transform var(--transition-quick), 
+                    border-color var(--transition-medium),
+                    box-shadow var(--transition-medium);
+        box-shadow: var(--shadow-strong), 0 0 10px var(--accent-dim);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .kiosk-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, transparent 0%, rgba(255, 236, 0, 0.05) 100%);
+        z-index: -1;
       }
 
       .kiosk-button:hover {
-        transform: scale(1.03); /* Slightly larger pop */
-        border-color: rgba(255, 236, 0, 0.6); /* Brighter yellow border */
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.7), /* Elevated shadow */
-                    0 0 12px rgba(255, 236, 0, 0.4); /* Stronger yellow glow */
+        transform: translateY(-5px) scale(1.02);
+        border-color: var(--accent-light);
+        box-shadow: var(--shadow-strong), 0 0 20px var(--accent-dim);
       }
 
-      h1 {
-        color: #FFFFFF;
-        margin-bottom: 40px;
-        text-align: center;
-        font-size: 32px;
-        font-weight: 600;
-        letter-spacing: -0.5px;
+      .kiosk-button:active {
+        transform: translateY(0) scale(0.98);
       }
 
-      .translated-text {
-        font-size: 20px;
+      .button-subtitle {
+        font-size: 18px;
         font-weight: 400;
-        color: rgba(255, 255, 255, 0.8);
+        margin-top: 6px;
       }
 
       #form-container {
-        display: none;
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         background: #000000;
+        z-index: 10;
+        display: none;
       }
 
       #form-iframe {
@@ -107,170 +216,579 @@
         position: fixed;
         top: 20px;
         left: 20px;
-        padding: 12px 25px;
+        padding: 14px 25px;
         font-size: 18px;
-        font-weight: 500; /* Matches buttons */
-        background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(30, 30, 30, 0.8));
-        backdrop-filter: blur(10px);
-        color: #FFEC00;
-        border: 1px solid rgba(255, 236, 0, 0.3);
-        border-radius: 10px;
+        font-weight: 500;
+        background: rgba(0, 0, 0, 0.7);
+        color: var(--accent-color);
+        border: 1px solid var(--accent-dim);
+        border-radius: var(--radius-small);
         cursor: pointer;
-        z-index: 1000;
+        z-index: 20;
         display: none;
-        transition: transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6),
-                    0 0 8px rgba(255, 236, 0, 0.2);
+        transition: all var(--transition-quick);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        box-shadow: var(--shadow-subtle);
       }
 
       #back-button:hover {
-        transform: scale(1.03);
-        border-color: rgba(255, 236, 0, 0.6);
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.7),
-                    0 0 12px rgba(255, 236, 0, 0.4);
+        transform: translateY(-2px);
+        background: rgba(0, 0, 0, 0.8);
+        border-color: var(--accent-light);
+      }
+
+      #loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        z-index: 30;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      .loader {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+        margin-bottom: 30px;
+      }
+
+      .loader div {
+        position: absolute;
+        top: 33px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: var(--accent-color);
+        animation-timing-function: cubic-bezier(0, 1, 1, 0);
+      }
+
+      .loader div:nth-child(1) {
+        left: 8px;
+        animation: loader1 0.6s infinite;
+      }
+
+      .loader div:nth-child(2) {
+        left: 8px;
+        animation: loader2 0.6s infinite;
+      }
+
+      .loader div:nth-child(3) {
+        left: 32px;
+        animation: loader2 0.6s infinite;
+      }
+
+      .loader div:nth-child(4) {
+        left: 56px;
+        animation: loader3 0.6s infinite;
+      }
+
+      @keyframes loader1 {
+        0% { transform: scale(0); }
+        100% { transform: scale(1); }
+      }
+
+      @keyframes loader2 {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(24px, 0); }
+      }
+
+      @keyframes loader3 {
+        0% { transform: scale(1); }
+        100% { transform: scale(0); }
+      }
+
+      .loading-text {
+        color: var(--accent-color);
+        font-size: 20px;
+        font-weight: 500;
+      }
+
+      #error-message {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background-color: rgba(220, 53, 69, 0.9);
+        color: white;
+        padding: 16px 25px;
+        border-radius: var(--radius-small);
+        z-index: 40;
+        text-align: center;
+        max-width: 80%;
+        box-shadow: var(--shadow-strong);
+        transition: transform 0.3s ease;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      #error-message.active {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+
+      #network-status {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: #2ecc71;
+        box-shadow: 0 0 10px #2ecc71;
+        z-index: 10;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      #network-status.offline {
+        background-color: #e74c3c;
+        box-shadow: 0 0 10px #e74c3c;
+      }
+
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 236, 0, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 236, 0, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 236, 0, 0); }
       }
     </style>
   </head>
   <body>
-    <div id="selection-page">
-      <canvas id="logo-canvas"></canvas>
-      <h1>
-        Please Select a Form<br>
-        <span class="translated-text">Por favor seleccione un formulario</span>
-      </h1>
-      <div class="button-container">
-        <button
-          onclick="loadForm('https://forms.office.com/Pages/ResponsePage.aspx?id=paHDdwIxFkWd44ENbeBJFQ8WL-MAQ11Oi1102Lg7uPlUMjFVRjI0RTBGTVpIWDVZMFVKUzJBMEk5RS4u')"
-          class="kiosk-button"
-        >
-          K°Lever Idea<br>
-          <span style="font-style: italic;">Forma de palanca K°</span>
-        </button>
-        <button
-          onclick="loadForm('https://forms.office.com/pages/responsepage.aspx?id=paHDdwIxFkWd44ENbeBJFR7gHGEW5LNLotXoyszYlLxUQjQ2WVk2QVFHTUhSWjNRMDMzUDgxTkM2RyQlQCN0PWcu&route=shorturl')"
-          class="kiosk-button"
-        >
-          Safety Form<br>
-          <span style="font-style: italic;">Formulario de seguridad</span>
-        </button>
-        <button
-          onclick="loadForm('https://forms.office.com/Pages/ResponsePage.aspx?id=paHDdwIxFkWd44ENbeBJFQ8WL-MAQ11Oi1102Lg7uPlUNkdNQkpGRlpSU0tBTFdJWU9UUTFWQkJTUy4u')"
-          class="kiosk-button"
-        >
-          Safety Incident Form<br>
-          <span style="font-style: italic;">Formulario de Incidentes de Seguridad</span>
-        </button>
+    <div id="app-container">
+      <div class="bg-gradient"></div>
+      <canvas class="particles" id="particles-canvas"></canvas>
+
+      <div id="selection-page">
+        <div class="logo-container">
+          <canvas id="logo-canvas"></canvas>
+          <div id="logo-fallback"></div>
+        </div>
+
+        <div class="page-title">
+          <h1>Please Select a Form</h1>
+          <div class="translated-text">Por favor seleccione un formulario</div>
+        </div>
+
+        <div class="button-container">
+          <button
+            onclick="loadForm('https://forms.office.com/Pages/ResponsePage.aspx?id=paHDdwIxFkWd44ENbeBJFQ8WL-MAQ11Oi1102Lg7uPlUMjFVRjI0RTBGTVpIWDVZMFVKUzJBMEk5RS4u')"
+            class="kiosk-button"
+          >
+            K°Lever Idea
+            <div class="button-subtitle">Forma de palanca K°</div>
+          </button>
+
+          <button
+            onclick="loadForm('https://forms.office.com/pages/responsepage.aspx?id=paHDdwIxFkWd44ENbeBJFR7gHGEW5LNLotXoyszYlLxUQjQ2WVk2QVFHTUhSWjNRMDMzUDgxTkM2RyQlQCN0PWcu&route=shorturl')"
+            class="kiosk-button"
+          >
+            Safety Form
+            <div class="button-subtitle">Formulario de seguridad</div>
+          </button>
+
+          <button
+            onclick="loadForm('https://forms.office.com/Pages/ResponsePage.aspx?id=paHDdwIxFkWd44ENbeBJFQ8WL-MAQ11Oi1102Lg7uPlUNkdNQkpGRlpSU0tBTFdJWU9UUTFWQkJTUy4u')"
+            class="kiosk-button"
+          >
+            Safety Incident Form
+            <div class="button-subtitle">Formulario de Incidentes de Seguridad</div>
+          </button>
+        </div>
       </div>
+
+      <button id="back-button" onclick="showSelection()">
+        Return to Selection
+      </button>
+
+      <div id="form-container">
+        <iframe id="form-iframe"></iframe>
+      </div>
+
+      <div id="loading-overlay">
+        <div class="loader"><div></div><div></div><div></div><div></div></div>
+        <div class="loading-text">Loading Form...</div>
+      </div>
+
+      <div id="error-message"></div>
+      <div id="network-status" title="Network Status"></div>
     </div>
 
-    <button id="back-button" onclick="showSelection()">
-      Return to Selection
-    </button>
-    <div id="form-container">
-      <iframe id="form-iframe"></iframe>
-    </div>
-
-    <!-- Load Three.js from CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <!-- JavaScript -->
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        let lastActivity = Date.now();
-        let formLoadTimeout;
-        let formIdleTimeout;
+      document.addEventListener("DOMContentLoaded", initApp);
 
-        // Track user activity
-        document.addEventListener("touchstart", () => lastActivity = Date.now());
+      // Core application initialization
+      function initApp() {
+        // Track system state
+        const state = {
+          lastActivity: Date.now(),
+          formLoadTimeout: null,
+          formIdleTimeout: null,
+          wakeLock: null,
+          isOnline: navigator.onLine
+        };
 
-        // Check every minute for idle time and refresh if 4 hours have passed on selection screen
-        setInterval(() => {
-          if (
-            document.getElementById("selection-page").style.display !== "none" &&
-            Date.now() - lastActivity > 4 * 60 * 60 * 1000
-          ) {
-            window.location.reload();
+        // Initialize all components
+        initActivityTracking();
+        initNetworkMonitoring();
+        initIdleMonitoring();
+        initWakeLock();
+        initParticles();
+        initLogo();
+        initServiceWorker();
+
+        // Track user activity events
+        function initActivityTracking() {
+          const activityEvents = ['touchstart', 'mousedown', 'mousemove', 'keydown'];
+          activityEvents.forEach(event => {
+            document.addEventListener(event, () => state.lastActivity = Date.now());
+          });
+        }
+
+        // Monitor network status
+        function initNetworkMonitoring() {
+          const statusIndicator = document.getElementById('network-status');
+          
+          function updateNetworkStatus() {
+            if (navigator.onLine) {
+              statusIndicator.classList.remove('offline');
+              statusIndicator.classList.remove('pulse');
+              statusIndicator.title = 'Online';
+              state.isOnline = true;
+            } else {
+              statusIndicator.classList.add('offline');
+              statusIndicator.classList.add('pulse');
+              statusIndicator.title = 'Offline - Check Connection';
+              state.isOnline = false;
+              showError('Network connection lost. Please wait or notify an administrator.', 0);
+            }
           }
-        }, 60000);
+          
+          window.addEventListener('online', () => {
+            updateNetworkStatus();
+            hideError();
+          });
+          
+          window.addEventListener('offline', updateNetworkStatus);
+          updateNetworkStatus();
+        }
 
-        // Function to load a form in the iframe
-        window.loadForm = function (url) {
-          clearTimeout(formLoadTimeout);
-          document.getElementById("selection-page").style.display = "none";
-          document.getElementById("form-container").style.display = "block";
-          document.getElementById("back-button").style.display = "block";
-          document.getElementById("form-iframe").src = url;
-          formLoadTimeout = setTimeout(function () {
-            console.warn("Form load timeout. Reverting to selection screen.");
+        // Check for long idle periods
+        function initIdleMonitoring() {
+          // Refresh page after 4 hours of inactivity on selection screen
+          setInterval(() => {
+            if (
+              document.getElementById("selection-page").style.display !== "none" &&
+              Date.now() - state.lastActivity > 4 * 60 * 60 * 1000
+            ) {
+              window.location.reload();
+            }
+          }, 60000);
+        }
+
+        // Keep screen awake
+        function initWakeLock() {
+          async function requestWakeLock() {
+            if ('wakeLock' in navigator) {
+              try {
+                state.wakeLock = await navigator.wakeLock.request('screen');
+                console.log('Wake Lock activated');
+              } catch (err) {
+                console.warn('Wake Lock request failed:', err);
+              }
+            }
+          }
+          
+          // Request wake lock initially
+          requestWakeLock();
+          
+          // Re-request wake lock when document becomes visible
+          document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && !state.wakeLock) {
+              requestWakeLock();
+            }
+          });
+        }
+
+        // Create background particles
+        function initParticles() {
+          const canvas = document.getElementById('particles-canvas');
+          const ctx = canvas.getContext('2d');
+          
+          // Set canvas dimensions to match window
+          function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+          }
+          
+          window.addEventListener('resize', resizeCanvas);
+          resizeCanvas();
+          
+          // Particle system
+          const particles = [];
+          const particleCount = 50;
+          
+          // Create particles
+          for (let i = 0; i < particleCount; i++) {
+            particles.push({
+              x: Math.random() * canvas.width,
+              y: Math.random() * canvas.height,
+              radius: Math.random() * 2 + 1,
+              color: 'rgba(255, 236, 0, ' + (Math.random() * 0.2 + 0.1) + ')',
+              speedX: Math.random() * 0.5 - 0.25,
+              speedY: Math.random() * 0.5 - 0.25
+            });
+          }
+          
+          // Animate particles
+          function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+              ctx.beginPath();
+              ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+              ctx.fillStyle = particle.color;
+              ctx.fill();
+              
+              // Move particle
+              particle.x += particle.speedX;
+              particle.y += particle.speedY;
+              
+              // Bounce off edges
+              if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
+              if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
+            });
+            
+            requestAnimationFrame(animateParticles);
+          }
+          
+          animateParticles();
+        }
+
+        // Initialize 3D logo
+        function initLogo() {
+          try {
+            // Dynamically load Three.js
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js';
+            script.onload = setupLogo;
+            script.onerror = handleLogoError;
+            document.head.appendChild(script);
+          } catch (e) {
+            handleLogoError();
+          }
+          
+          function setupLogo() {
+            try {
+              const canvas = document.getElementById('logo-canvas');
+              const scene = new THREE.Scene();
+              const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+              
+              const renderer = new THREE.WebGLRenderer({ 
+                canvas: canvas, 
+                alpha: true, 
+                antialias: true 
+              });
+              renderer.setSize(200, 200);
+              renderer.setClearColor(0x000000, 0);
+              
+              // Load logo texture
+              const textureLoader = new THREE.TextureLoader();
+              textureLoader.load(
+                'transparent_white_logo.png',
+                function(texture) {
+                  const geometry = new THREE.PlaneGeometry(2.5, 2.5);
+                  const material = new THREE.MeshBasicMaterial({
+                    map: texture,
+                    transparent: true,
+                    side: THREE.DoubleSide
+                  });
+                  
+                  const logo = new THREE.Mesh(geometry, material);
+                  scene.add(logo);
+                  
+                  camera.position.z = 3.5;
+                  
+                  // Add ambient light
+                  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+                  scene.add(ambientLight);
+                  
+                  // Add directional light
+                  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                  directionalLight.position.set(0, 1, 5);
+                  scene.add(directionalLight);
+                  
+                  let rotationSpeed = 0.005;
+                  let hoverActive = false;
+                  
+                  // Interaction effects
+                  canvas.addEventListener('mouseenter', () => {
+                    hoverActive = true;
+                    rotationSpeed = 0.02;
+                  });
+                  
+                  canvas.addEventListener('mouseleave', () => {
+                    hoverActive = false;
+                    rotationSpeed = 0.005;
+                  });
+                  
+                  canvas.addEventListener('touchstart', () => {
+                    hoverActive = true;
+                    rotationSpeed = 0.02;
+                    setTimeout(() => {
+                      hoverActive = false;
+                      rotationSpeed = 0.005;
+                    }, 2000);
+                  });
+                  
+                  // Animation loop
+                  function animate() {
+                    try {
+                      requestAnimationFrame(animate);
+                      
+                      // Rotate logo
+                      logo.rotation.y += rotationSpeed;
+                      
+                      // Subtle floating effect when hovering
+                      if (hoverActive) {
+                        logo.position.y = Math.sin(Date.now() * 0.002) * 0.1;
+                      }
+                      
+                      renderer.render(scene, camera);
+                    } catch (error) {
+                      console.error('Animation error:', error);
+                      handleLogoError();
+                    }
+                  }
+                  
+                  animate();
+                },
+                undefined,
+                handleLogoError
+              );
+            } catch (error) {
+              console.error('Three.js setup error:', error);
+              handleLogoError();
+            }
+          }
+          
+          function handleLogoError() {
+            document.getElementById('logo-canvas').style.display = 'none';
+            document.getElementById('logo-fallback').style.display = 'block';
+          }
+        }
+
+        // Set up service worker for offline support
+        function initServiceWorker() {
+          if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+              navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('ServiceWorker registered'))
+                .catch(err => console.log('ServiceWorker registration failed:', err));
+            });
+          }
+        }
+
+        // Error and status message handling
+        window.showError = function(message, duration = 5000) {
+          const errorElement = document.getElementById('error-message');
+          errorElement.textContent = message;
+          errorElement.classList.add('active');
+          
+          if (duration > 0) {
+            setTimeout(() => {
+              errorElement.classList.remove('active');
+            }, duration);
+          }
+        };
+        
+        window.hideError = function() {
+          document.getElementById('error-message').classList.remove('active');
+        };
+
+        // Form loading with enhanced reliability
+        window.loadForm = function(url) {
+          if (!state.isOnline) {
+            showError('Unable to load form: No internet connection');
+            return;
+          }
+          
+          // Clear any existing timeouts
+          clearTimeout(state.formLoadTimeout);
+          clearTimeout(state.formIdleTimeout);
+          
+          // Show loading overlay
+          document.getElementById('loading-overlay').style.display = 'flex';
+          
+          // Hide selection page and show form container
+          document.getElementById('selection-page').style.display = 'none';
+          document.getElementById('form-container').style.display = 'block';
+          document.getElementById('back-button').style.display = 'block';
+          
+          // Set timeout for form loading
+          state.formLoadTimeout = setTimeout(function() {
+            showError('Form is taking too long to load. Returning to selection screen.');
             showSelection();
           }, 30000);
-          formIdleTimeout = setTimeout(() => {
+          
+          // Set timeout for form inactivity
+          state.formIdleTimeout = setTimeout(() => {
             showSelection();
           }, 30 * 60 * 1000);
+          
+          // Load form in iframe
+          document.getElementById('form-iframe').src = url;
         };
 
-        // Function to return to the selection screen
-        window.showSelection = function () {
-          clearTimeout(formLoadTimeout);
-          clearTimeout(formIdleTimeout);
-          lastActivity = Date.now();
-          document.getElementById("selection-page").style.display = "flex";
-          document.getElementById("form-container").style.display = "none";
-          document.getElementById("back-button").style.display = "none";
-          document.getElementById("form-iframe").src = "";
+        // Return to selection screen
+        window.showSelection = function() {
+          clearTimeout(state.formLoadTimeout);
+          clearTimeout(state.formIdleTimeout);
+          state.lastActivity = Date.now();
+          
+          document.getElementById('loading-overlay').style.display = 'none';
+          document.getElementById('selection-page').style.display = 'flex';
+          document.getElementById('form-container').style.display = 'none';
+          document.getElementById('back-button').style.display = 'none';
+          document.getElementById('form-iframe').src = '';
+          
+          hideError();
         };
 
-        // Monitor the iframe load event to detect when the user has completed a form
-        document.getElementById("form-iframe").onload = function () {
+        // Handle iframe events
+        const formIframe = document.getElementById('form-iframe');
+        
+        formIframe.addEventListener('load', function() {
+          document.getElementById('loading-overlay').style.display = 'none';
+          clearTimeout(state.formLoadTimeout);
+          
           try {
-            if (this.contentWindow.location.href.includes("thankyou")) {
+            // Check for form completion
+            if (this.contentWindow.location.href.includes('thankyou')) {
               showSelection();
             }
           } catch (e) {
-            console.warn("Cross-origin check not permitted:", e);
-          } finally {
-            clearTimeout(formLoadTimeout);
+            console.warn('Cross-origin access restricted:', e);
           }
-        };
-
-        // Three.js Logo Animation (Bigger)
-        const canvas = document.getElementById("logo-canvas");
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000); // Aspect ratio 1 for square canvas
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-        renderer.setSize(200, 200); // Increased size
-
-        const textureLoader = new THREE.TextureLoader();
-        const logoTexture = textureLoader.load("kelvion_logo-transformed.png");
-        const geometry = new THREE.PlaneGeometry(2.5, 2.5); // Slightly larger plane
-        const material = new THREE.MeshBasicMaterial({
-          map: logoTexture,
-          transparent: true,
-          side: THREE.DoubleSide
         });
-        const logo = new THREE.Mesh(geometry, material);
-        scene.add(logo);
-
-        camera.position.z = 3.5; // Adjusted camera distance for larger logo
-
-        let rotationSpeed = 0.005;
-        let isTouched = false;
-
-        // Touch interaction
-        canvas.addEventListener("touchstart", () => {
-          isTouched = true;
-          rotationSpeed = 0.02;
-          setTimeout(() => {
-            isTouched = false;
-            rotationSpeed = 0.005;
-          }, 2000);
+        
+        formIframe.addEventListener('error', function() {
+          showError('Error loading form. Please try again.');
+          showSelection();
         });
-
-        function animate() {
-          requestAnimationFrame(animate);
-          logo.rotation.y += rotationSpeed;
-          renderer.render(scene, camera);
-        }
-        animate();
-      });
+      }
     </script>
   </body>
 </html>
