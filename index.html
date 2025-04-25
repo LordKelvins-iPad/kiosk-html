@@ -367,57 +367,61 @@
   </head>
   <body>
     <div id="app-container">
-      <div class="bg-gradient"></div>
-      <canvas class="particles" id="particles-canvas"></canvas>
+  <div class="bg-gradient"></div>
+  <canvas class="particles" id="particles-canvas"></canvas>
 
-      <div id="selection-page">
-        <div class="logo-container">
-          <canvas id="logo-canvas"></canvas>
-          <div id="logo-fallback"></div>
-        </div>
-
-        <div class="page-title">
-          <h1>Please Select a Form</h1>
-          <div class="translated-text">Por favor seleccione un formulario</div>
-        </div>
-
-        <div class="button-container">
-          <button
-            onclick="loadForm('https://forms.office.com/Pages/ResponsePage.aspx?id=paHDdwIxFkWd44ENbeBJFQ8WL-MAQ11Oi1102Lg7uPlUMjFVRjI0RTBGTVpIWDVZMFVKUzJBMEk5RS4u')"
-            class="kiosk-button"
-          >
-            KMAeX K°Lever Idea Form
-            <div class="button-subtitle">Forma de palanca (K°Lever)</div>
-          </button>
-
-          <button
-            onclick="loadForm('https://forms.office.com/pages/responsepage.aspx?id=paHDdwIxFkWd44ENbeBJFR7gHGEW5LNLotXoyszYlLxUQjQ2WVk2QVFHTUhSWjNRMDMzUDgxTkM2RyQlQCN0PWcu&route=shorturl')"
-            class="kiosk-button"
-          >
-            Safety Incident/Feedback Form
-            <div class="button-subtitle">Formulario de seguridad</div>
-          </button>
-
-      <button id="back-button" onclick="showSelection()">
-        Return to Selection
-      </button>
-
-      <div id="form-container">
-        <iframe id="form-iframe"></iframe>
-      </div>
-
-      <div id="loading-overlay">
-        <div class="loader"><div></div><div></div><div></div><div></div></div>
-        <div class="loading-text">Loading Form...</div>
-      </div>
-
-      <div id="error-message"></div>
-      <div id="network-status" title="Network Status"></div>
+  <div id="selection-page">
+    <div class="logo-container">
+      <canvas id="logo-canvas"></canvas>
+      <div id="logo-fallback"></div>
     </div>
 
-    <!-- JavaScript -->
-    <script>
-      document.addEventListener("DOMContentLoaded", initApp);
+    <div class="page-title">
+      <h1>Please Select a Form</h1>
+      <div class="translated-text">Por favor seleccione un formulario</div>
+    </div>
+
+    <div class="button-container">
+      <button
+        onclick="loadForm('https://forms.office.com/Pages/ResponsePage.aspx?id=paHDdwIxFkWd44ENbeBJFQ8WL-MAQ11Oi1102Lg7uPlUMjFVRjI0RTBGTVpIWDVZMFVKUzJBMEk5RS4u')"
+        class="kiosk-button"
+      >
+        KMAeX K°Lever Idea Form
+        <div class="button-subtitle">Forma de palanca (K°Lever)</div>
+      </button>
+
+      <button
+        onclick="loadForm('https://forms.office.com/pages/responsepage.aspx?id=paHDdwIxFkWd44ENbeBJFR7gHGEW5LNLotXoyszYlLxUQjQ2WVk2QVFHTUhSWjNRMDMzUDgxTkM2RyQlQCN0PWcu&route=shorturl')"
+        class="kiosk-button"
+      >
+        Safety Incident/Feedback Form
+        <div class="button-subtitle">Formulario de seguridad</div>
+      </button>
+    </div>  <!-- /.button-container -->
+
+  </div>  <!-- /#selection-page -->
+
+  <button id="back-button" onclick="showSelection()">
+    Return to Selection
+  </button>
+
+  <div id="form-container">
+    <iframe id="form-iframe"></iframe>
+  </div>
+
+  <div id="loading-overlay">
+    <div class="loader"><div></div><div></div><div></div><div></div></div>
+    <div class="loading-text">Loading Form...</div>
+  </div>
+
+  <div id="error-message"></div>
+  <div id="network-status" title="Network Status"></div>
+</div>  <!-- /#app-container -->
+
+<!-- JavaScript -->
+<script>
+  document.addEventListener("DOMContentLoaded", initApp);
+
 
       // Core application initialization
       function initApp() {
